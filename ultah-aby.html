@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Selamat Ulang Tahun, Aby 🎂</title>
+  <meta name="description" content="Halaman spesial ulang tahun Aby — 4 September 2026" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f0a14;
+      --card: rgba(255, 255, 255, 0.06);
+      --stroke: rgba(255, 255, 255, 0.12);
+      --text: #faf7ff;
+      --muted: #c4b5d4;
+      --pink: #ff6b9d;
+      --gold: #f5c16c;
+      --lilac: #b794f4;
+      --mint: #6ee7b7;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.55;
+    }
+
+    /* soft gradient blobs */
+    .bg-blob {
+      position: fixed;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.35;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .blob-1 { top: -80px; left: -100px; background: #ff6b9d; }
+    .blob-2 { top: 40%; right: -120px; background: #7c3aed; }
+    .blob-3 { bottom: -100px; left: 20%; background: #f5c16c; opacity: 0.2; }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 28px 18px 80px;
+    }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 36px 16px 28px;
+      border: 1px solid var(--stroke);
+      background: linear-gradient(160deg, rgba(255,107,157,0.12), rgba(183,148,244,0.08) 50%, rgba(245,193,108,0.06));
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      animation: floatIn 0.8s ease both;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(245, 193, 108, 0.12);
+      border: 1px solid rgba(245, 193, 108, 0.25);
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(2rem, 7vw, 3.1rem);
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+    .hero h1 span {
+      background: linear-gradient(120deg, var(--pink), var(--lilac), var(--gold));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero .sub {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 34ch;
+      margin: 0 auto 22px;
+    }
+    .date-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--stroke);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    /* COUNTDOWN */
+    section { margin-top: 22px; }
+    .section-title {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.35rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title em {
+      font-style: normal;
+      font-size: 0.75rem;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-weight: 600;
+      color: var(--muted);
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--stroke);
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .cd-card {
+      text-align: center;
+      padding: 16px 8px;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      backdrop-filter: blur(8px);
+    }
+    .cd-card .n {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      font-weight: 700;
+      color: var(--pink);
+      line-height: 1.1;
+    }
+    .cd-card .l {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .cd-done {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(255,107,157,0.2), rgba(183,148,244,0.15));
+      border: 1px solid var(--stroke);
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    /* MESSAGE */
+    .card {
+      padding: 22px 20px;
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      animation: floatIn 0.9s ease both;
+    }
+    .card p {
+      color: var(--muted);
+      margin-bottom: 12px;
+      font-size: 0.98rem;
+    }
+    .card p:last-child { margin-bottom: 0; }
+    .card strong { color: var(--text); }
+    .signature {
+      margin-top: 16px;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.25rem;
+      color: var(--gold);
+    }
+
+    /* MEDIA */
+    .media-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 560px) {
+      .media-grid.photos { grid-template-columns: repeat(3, 1fr); }
+    }
+    .photo, .video-box, .music-box {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,0.25);
+      position: relative;
+    }
+    .photo {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 12px;
+      background:
+        linear-gradient(145deg, rgba(255,107,157,0.15), rgba(183,148,244,0.1));
+    }
+    .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .photo .placeholder-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      pointer-events: none;
+    }
+    .video-box { aspect-ratio: 16 / 9; }
+    .video-box video, .video-box iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #000;
+    }
+    .video-box .ph {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .music-box { padding: 14px; }
+    .music-box iframe {
+      width: 100%;
+      height: 152px;
+      border: 0;
+      border-radius: 12px;
+    }
+    .music-hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* FUN */
+    .fun-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    button.fun {
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 12px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    button.fun:hover { transform: translateY(-2px); background: rgba(255,255,255,0.1); }
+    button.fun:active { transform: scale(0.98); }
+    button.fun.primary {
+      background: linear-gradient(120deg, var(--pink), var(--lilac));
+      border: none;
+      box-shadow: 0 8px 24px rgba(255, 107, 157, 0.3);
+    }
+
+    .wish {
+      margin-top: 14px;
+      min-height: 48px;
+      text-align: center;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--mint);
+      transition: opacity 0.3s ease;
+    }
+
+    footer {
+      margin-top: 36px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    /* confetti canvas */
+    #confetti {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+  <canvas id="confetti"></canvas>
+
+  <div class="wrap">
+    <!-- HERO -->
+    <header class="hero">
+      <div class="badge">🎂 Birthday Special</div>
+      <h1>Selamat Ulang Tahun,<br /><span>Aby</span>!</h1>
+      <p class="sub">
+        Hari ini dunia dapat upgrade karakter langka: kamu bertambah keren (dan tetap lucu).
+      </p>
+      <div class="date-pill">📅 4 September 2026</div>
+    </header>
+
+    <!-- COUNTDOWN -->
+    <section>
+      <h2 class="section-title">Countdown <em>menuju hari H</em></h2>
+      <div class="countdown" id="countdown">
+        <div class="cd-card"><div class="n" id="cd-d">0</div><div class="l">Hari</div></div>
+        <div class="cd-card"><div class="n" id="cd-h">0</div><div class="l">Jam</div></div>
+        <div class="cd-card"><div class="n" id="cd-m">0</div><div class="l">Menit</div></div>
+        <div class="cd-card"><div class="n" id="cd-s">0</div><div class="l">Detik</div></div>
+      </div>
+      <div class="cd-done" id="cd-done">🎉 Hari ini ulang tahun Aby! Gas rayakan!</div>
+    </section>
+
+    <!-- UCAPAN -->
+    <section>
+      <h2 class="section-title">Ucapan</h2>
+      <div class="card">
+        <p>Hai <strong>Aby</strong>,</p>
+        <p>
+          Selamat bertambah usia! Semoga tahun ini penuh tawa yang nggak kepaksa,
+          rezeki yang nggak utang, dan drama yang cuma di series — bukan di hidupmu.
+        </p>
+        <p>
+          Tetap jadi versi dirimu yang elegan di luar, chaos (secara lucu) di dalam.
+          Makasih sudah jadi teman yang bikin hari-hari lebih berwarna.
+        </p>
+        <p>Sehat selalu, bahagia terus, dan… jangan lupa tiup lilinnya (meski virtual).</p>
+        <div class="signature">— Dari seseorang yang sayang banget 💜</div>
+      </div>
+      <div class="fun-row">
+        <button type="button" class="fun primary" id="btn-confetti">🎉 Lempar confetti</button>
+        <button type="button" class="fun" id="btn-wish">✨ Acak ucapan lucu</button>
+      </div>
+      <div class="wish" id="wish" aria-live="polite"></div>
+    </section>
+
+    <!-- VIDEO (1) -->
+    <section>
+      <h2 class="section-title">Video spesial <em>1 video</em></h2>
+      <div class="video-box" id="video-box">
+        <!--
+          GANTI salah satu:
+          A) File sendiri: taruh video.mp4 di folder yang sama, uncomment <video>
+          B) YouTube: ganti YOUTUBE_VIDEO_ID di script bawah (mode embed)
+        -->
+        <div class="ph" id="video-ph">
+          <div style="font-size:2rem">🎬</div>
+          <div><strong>Slot video</strong></div>
+          <div style="font-size:0.8rem;max-width:28ch">
+            Ganti dengan file <code>video.mp4</code> atau embed YouTube — lihat komentar di HTML.
+          </div>
+        </div>
+        <!-- Contoh file lokal (hapus class hidden / tampilkan setelah file ada):
+        <video controls playsinline poster="foto1.jpg" src="video.mp4"></video>
+        -->
+      </div>
+    </section>
+
+    <!-- FOTO (3) -->
+    <section>
+      <h2 class="section-title">Kenangan <em>3 foto</em></h2>
+      <div class="media-grid photos">
+        <div class="photo" id="foto1">
+          <div class="placeholder-label">
+            <span style="font-size:1.6rem">📷</span>
+            <span>Foto 1<br /><small>ganti src foto1.jpg</small></span>
+          </div>
+          <!-- <img src="foto1.jpg" alt="Kenangan 1" /> -->
+        </div>
+        <div class="photo" id="foto2">
+          <div class="placeholder-label">
+            <span style="font-size:1.6rem">📷</span>
+            <span>Foto 2<br /><small>ganti src foto2.jpg</small></span>
+          </div>
+          <!-- <img src="foto2.jpg" alt="Kenangan 2" /> -->
+        </div>
+        <div class="photo" id="foto3">
+          <div class="placeholder-label">
+            <span style="font-size:1.6rem">📷</span>
+            <span>Foto 3<br /><small>ganti src foto3.jpg</small></span>
+          </div>
+          <!-- <img src="foto3.jpg" alt="Kenangan 3" /> -->
+        </div>
+      </div>
+    </section>
+
+    <!-- MUSIK YOUTUBE -->
+    <section>
+      <h2 class="section-title">Musik <em>YouTube</em></h2>
+      <div class="card music-box">
+        <!-- Ganti YT_ID di bawah (default: lagu birthday klasik instrumental / ganti favorit Aby) -->
+        <iframe
+          id="yt-music"
+          title="Musik ulang tahun"
+          src="https://www.youtube.com/embed/jqkPXTfhyTg?rel=0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+        <p class="music-hint">
+          Ganti ID video di atribut <code>src</code> iframe (contoh: youtube.com/watch?v=<strong>ID_INI</strong>).
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      Dibuat dengan 💜 untuk <strong>Aby</strong> · 4 September 2026
+    </footer>
+  </div>
+
+  <script>
+    // ===== CONFIG — ganti sesuai kebutuhan =====
+    const TARGET = new Date("2026-09-04T00:00:00+07:00"); // WIB
+    // YouTube music: sudah di iframe. Video spesial (opsional embed):
+    const YT_VIDEO_ID = ""; // isi mis. "dQw4w9WgXcQ" untuk embed video di slot video
+
+    const wishes = [
+      "Semoga kue tahun ini lebih manis dari chat yang dibales sehari kemudian 🍰",
+      "Level up! Unlock skill: tidur cukup & dompet tebal 💸",
+      "Aby age +1, aura +100, drama −99 ✨",
+      "Doa tulus: WiFi kencang, hati tenang, gebetan jelas 📡",
+      "Selamat ulang tahun! Bonus stage: bahagia tanpa buffering 🎮",
+      "Semoga semua wishlist-mu centang hijau tahun ini ✅",
+      "Tetap elegan… kecuali pas ketawa — itu wajib kenceng 😂",
+    ];
+
+    // Countdown
+    const el = (id) => document.getElementById(id);
+    function tick() {
+      const now = new Date();
+      let diff = TARGET - now;
+      if (diff <= 0) {
+        el("countdown").style.display = "none";
+        el("cd-done").style.display = "block";
+        return;
+      }
+      const d = Math.floor(diff / 86400000);
+      diff %= 86400000;
+      const h = Math.floor(diff / 3600000);
+      diff %= 3600000;
+      const m = Math.floor(diff / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      el("cd-d").textContent = d;
+      el("cd-h").textContent = h;
+      el("cd-m").textContent = m;
+      el("cd-s").textContent = s;
+    }
+    tick();
+    setInterval(tick, 1000);
+
+    // Wishes
+    el("btn-wish").addEventListener("click", () => {
+      const w = wishes[Math.floor(Math.random() * wishes.length)];
+      const node = el("wish");
+      node.style.opacity = "0";
+      setTimeout(() => {
+        node.textContent = w;
+        node.style.opacity = "1";
+      }, 150);
+    });
+
+    // Optional YouTube video embed in video slot
+    if (YT_VIDEO_ID) {
+      const box = el("video-box");
+      box.innerHTML =
+        '<iframe src="https://www.youtube.com/embed/' +
+        encodeURIComponent(YT_VIDEO_ID) +
+        '?rel=0" title="Video spesial" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>';
+    }
+
+    // Confetti
+    const canvas = el("confetti");
+    const ctx = canvas.getContext("2d");
+    let pieces = [];
+    let animating = false;
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function spawnConfetti() {
+      const colors = ["#ff6b9d", "#b794f4", "#f5c16c", "#6ee7b7", "#60a5fa", "#f472b6"];
+      for (let i = 0; i < 120; i++) {
+        pieces.push({
+          x: Math.random() * canvas.width,
+          y: -20 - Math.random() * 80,
+          w: 6 + Math.random() * 6,
+          h: 8 + Math.random() * 10,
+          c: colors[(Math.random() * colors.length) | 0],
+          vy: 2 + Math.random() * 4,
+          vx: -2 + Math.random() * 4,
+          r: Math.random() * Math.PI,
+          vr: -0.2 + Math.random() * 0.4,
+        });
+      }
+      if (!animating) {
+        animating = true;
+        loop();
+      }
+    }
+
+    function loop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pieces.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.r += p.vr;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.r);
+        ctx.fillStyle = p.c;
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+      });
+      pieces = pieces.filter((p) => p.y < canvas.height + 40);
+      if (pieces.length) {
+        requestAnimationFrame(loop);
+      } else {
+        animating = false;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    el("btn-confetti").addEventListener("click", spawnConfetti);
+
+    // Auto confetti if already birthday
+    if (TARGET - new Date() <= 0) spawnConfetti();
+  </script>
+</body>
+</html>
