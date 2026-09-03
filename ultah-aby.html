@@ -15,6 +15,7 @@
     animation:bgMove 12s ease infinite;
     overflow:hidden;
     text-align:center;
+    position:relative;
   }
   @keyframes bgMove {
     0%{background-position:0% 50%;}
@@ -24,7 +25,7 @@
   .card {
     background:rgba(255,255,255,0.75);
     backdrop-filter:blur(6px);
-    padding:40px 30px;
+    padding:35px 30px;
     border-radius:24px;
     box-shadow:0 10px 30px rgba(0,0,0,0.15);
     max-width:400px;
@@ -34,8 +35,8 @@
     font-family:'Georgia', serif;
     font-style:italic;
     color:#d6336c;
-    font-size:2.2em;
-    margin-bottom:10px;
+    font-size:2em;
+    margin-bottom:15px;
   }
   p.msg {
     color:#555;
@@ -69,12 +70,91 @@
     0% { transform:translateY(0) rotate(0deg); opacity:0.8; }
     100% { transform:translateY(-110vh) rotate(360deg); opacity:0; }
   }
+
+  /* KUE & LILIN */
+  .cake-wrap { margin:10px auto 20px; }
+  .cake { width:160px; margin:0 auto; cursor:pointer; user-select:none; }
+  .flame {
+    width:10px; height:16px;
+    background:radial-gradient(circle, #ffe08a 0%, #ff9d3f 60%, #ff5e3a 100%);
+    border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+    margin:0 auto;
+    animation:flicker 0.4s infinite alternate;
+    transform-origin:bottom center;
+  }
+  @keyframes flicker {
+    0% { transform:scale(1) rotate(-3deg); }
+    100% { transform:scale(1.1) rotate(3deg); }
+  }
+  .flame.off { animation:none; opacity:0; transition:opacity 0.3s; }
+  .smoke {
+    width:4px; height:0px;
+    background:#ccc;
+    margin:0 auto;
+    border-radius:50%;
+    opacity:0;
+  }
+  .smoke.show {
+    animation:smokeUp 1.2s ease-out forwards;
+  }
+  @keyframes smokeUp {
+    0% { opacity:0.7; height:0px; }
+    50% { opacity:0.5; height:20px; }
+    100% { opacity:0; height:40px; transform:translateY(-15px); }
+  }
+  .wick { width:3px; height:12px; background:#5a3d2b; margin:0 auto; }
+  .candle {
+    width:8px; height:35px;
+    background:repeating-linear-gradient(45deg,#7dd3fc,#7dd3fc 4px,#ffffff 4px,#ffffff 8px);
+    margin:0 auto;
+    border-radius:2px;
+  }
+  .plate { text-align:center; }
+  .cake-top {
+    width:120px; height:22px;
+    background:#fff0f5;
+    border:3px solid #ffb6c1;
+    border-radius:50%;
+    margin:0 auto -8px;
+    position:relative;
+    z-index:2;
+  }
+  .cake-mid {
+    width:140px; height:50px;
+    background:linear-gradient(#ffd1dc,#ffb6c1);
+    border-left:3px solid #ff8fab;
+    border-right:3px solid #ff8fab;
+    border-bottom:3px solid #ff8fab;
+    border-radius:0 0 14px 14px;
+    margin:0 auto;
+  }
+  .hint { font-size:0.85em; color:#a15c7a; margin-top:8px; }
+  .tiup-msg {
+    display:none;
+    color:#d6336c;
+    font-weight:bold;
+    margin-top:10px;
+  }
 </style>
 </head>
 <body>
 
 <div class="card">
   <h1>Happy Birthday, Aby! 🎂💗</h1>
+
+  <div class="cake-wrap">
+    <div class="cake" id="cake" onclick="tiupLilin()">
+      <div class="smoke" id="smoke"></div>
+      <div class="flame" id="flame"></div>
+      <div class="wick"></div>
+      <div class="candle"></div>
+      <div class="cake-top"></div>
+      <div class="cake-mid"></div>
+    </div>
+    <div class="hint" id="hint">👆 Tekan lilinnya untuk meniup</div>
+    <div class="tiup-msg" id="tiupMsg">🎉 Yeay! Buat wish, Aby! 🎉</div>
+  </div>
+
   <p style="color:#888;">Klik tombol di bawah untuk membuka pesan spesial 👇</p>
   <p class="msg" id="pesan">
     Di hari spesialmu ini, semoga semua doa dan harapan baik selalu menyertaimu, Aby.
@@ -97,6 +177,41 @@
     h.style.animationDuration = (5 + Math.random()*8) + 's';
     h.style.animationDelay = (Math.random()*5) + 's';
     document.body.appendChild(h);
+  }
+
+  let ditiup = false;
+  function tiupLilin() {
+    if (ditiup) return;
+    ditiup = true;
+    document.getElementById('flame').classList.add('off');
+    document.getElementById('smoke').classList.add('show');
+    document.getElementById('hint').style.display = 'none';
+    document.getElementById('tiupMsg').style.display = 'block';
+    confetti();
+  }
+
+  function confetti() {
+    const colors = ['#ff8fab','#ffd6e8','#e0c3fc','#ffe08a','#ffffff'];
+    for (let i = 0; i < 40; i++) {
+      const c = document.createElement('div');
+      c.style.position = 'fixed';
+      c.style.top = '-10px';
+      c.style.left = Math.random()*100 + 'vw';
+      c.style.width = '8px';
+      c.style.height = '8px';
+      c.style.background = colors[Math.floor(Math.random()*colors.length)];
+      c.style.opacity = '0.9';
+      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      c.style.zIndex = '9999';
+      c.style.pointerEvents = 'none';
+      document.body.appendChild(c);
+      const duration = 2 + Math.random()*2;
+      c.animate([
+        { transform: 'translateY(0) rotate(0deg)', opacity: 0.9 },
+        { transform: `translateY(${window.innerHeight + 20}px) rotate(${360 + Math.random()*360}deg)`, opacity: 0 }
+      ], { duration: duration*1000, easing:'ease-in' });
+      setTimeout(() => c.remove(), duration*1000);
+    }
   }
 </script>
 
