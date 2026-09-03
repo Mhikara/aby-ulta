@@ -121,6 +121,22 @@
   footer{margin-top:44px; text-align:center; color:var(--muted); font-size:.8rem;}
 
   #confetti{position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:50;}
+
+.balloonOverlay{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden;}
+.letterBalloon{position:absolute;bottom:-70px;text-align:center;
+  font-family:'Bangers',cursive;font-size:1.7rem;color:#fff;
+  animation:floatBalloon 3.4s ease-in forwards;}
+.letterBalloon .balloon{width:26px;height:32px;margin:0 auto 4px;
+  border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+  box-shadow:inset -4px -4px 8px rgba(0,0,0,.25), 2px 4px 6px rgba(0,0,0,.3);}
+.letterBalloon .string{width:1px;height:16px;background:rgba(255,255,255,.5);margin:0 auto;}
+@keyframes floatBalloon{
+  0%{transform:translateY(0) rotate(-4deg);opacity:0;}
+  8%{opacity:1;}
+  50%{transform:translateY(-60vh) rotate(4deg);}
+  100%{transform:translateY(-125vh) rotate(-4deg);opacity:0;}
+}
+
 </style>
 </head>
 <body>
@@ -186,6 +202,30 @@
 </div>
 
 <script>
+function launchBalloons(){
+  const msg = "HAPPY BIRTHDAY ABY!";
+  const overlay = document.createElement('div');
+  overlay.className = 'balloonOverlay';
+  document.body.appendChild(overlay);
+  const colors = ["#ff6b9d","#ffd36e","#7dffc3","#c4a0ff","#ff9d3f","#5ec8ff","#ff5e7e"];
+  const chars = msg.split('');
+  const usable = chars.filter(c => c !== ' ').length;
+  let i = 0;
+  chars.forEach(ch => {
+    if(ch === ' ') return;
+    const el = document.createElement('div');
+    el.className = 'letterBalloon';
+    const leftPos = 6 + (i/(usable-1)) * 88;
+    el.style.left = leftPos + 'vw';
+    el.style.animationDelay = (i*0.13) + 's';
+    const color = colors[i % colors.length];
+    el.innerHTML = '<div class="balloon" style="background:'+color+'"></div><div class="string"></div><span>'+ch+'</span>';
+    overlay.appendChild(el);
+    i++;
+  });
+  setTimeout(() => overlay.remove(), 4400);
+}
+
 const $=s=>document.querySelector(s);
 
 /* countdown ke ulang tahun berikutnya */
@@ -258,10 +298,13 @@ function tiupLilin(){
   $("#cakeHint").textContent="🎉 Yeay! Semoga wish-nya kewujud, Aby.";
   $("#cakeHint").classList.add("done");
   boom();
-  const box=$("#deepMsg");
-  box.classList.remove("locked");
-  box.classList.add("unlocked");
-  box.innerHTML=deepText;
+  launchBalloons();
+  setTimeout(()=>{
+    const box=$("#deepMsg");
+    box.classList.remove("locked");
+    box.classList.add("unlocked");
+    box.innerHTML=deepText;
+  }, 1200);
 }
 </script>
 </body>
