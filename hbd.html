@@ -76,16 +76,19 @@ const octx = off.getContext('2d');
 octx.fillStyle = '#fff';
 octx.textAlign = 'center';
 octx.textBaseline = 'middle';
-const fontSize = Math.min(canvas.width/7, 46);
+const fontSize = Math.min(canvas.width/6, 54);
 octx.font = 'bold ' + fontSize + 'px Bangers, sans-serif';
+octx.lineWidth = 2.5;
+octx.strokeStyle = '#fff';
 const lineHeight = fontSize*1.15;
 const startY = canvas.height/2 - (lines.length-1)*lineHeight/2;
 lines.forEach((line,li)=>{
   octx.fillText(line, canvas.width/2, startY + li*lineHeight);
+  octx.strokeText(line, canvas.width/2, startY + li*lineHeight);
 });
 const imgData = octx.getImageData(0,0,off.width,off.height).data;
 const points = [];
-const gap = 4;
+const gap = 2;
 for(let y=0;y<off.height;y+=gap){
   for(let x=0;x<off.width;x+=gap){
     const idx = (y*off.width+x)*4+3;
@@ -93,7 +96,7 @@ for(let y=0;y<off.height;y+=gap){
   }
 }
 points.sort(()=>Math.random()-0.5);
-const targets = points.slice(0, 650);
+const targets = points.slice(0, 1600);
 
 const particles = targets.map(t=>({
   x: Math.random()*canvas.width,
@@ -140,7 +143,7 @@ function frame(ts){
     ctx.globalAlpha = Math.max(p.alpha,0);
     ctx.fillStyle = p.color;
     ctx.beginPath();
-    ctx.arc(p.cx, p.cy, 2.2, 0, Math.PI*2);
+    ctx.arc(p.cx, p.cy, 1.6, 0, Math.PI*2);
     ctx.fill();
   });
   ctx.globalAlpha = 1;
