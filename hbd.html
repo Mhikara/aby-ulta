@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Aby!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#ff6b9d; --lilac:#c4a0ff; --gold:#ffd36e; --mint:#7dffc3;
+    --comic:#ffe566; --card:#241a33; --muted:#c9bfe0;
+    --bg1:#1a1030; --bg2:#3a1f45;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:'Poppins',sans-serif; color:#fff; min-height:100vh;
+    background:radial-gradient(circle at top,var(--bg2),var(--bg1));
+    display:flex; align-items:center; justify-content:center; overflow-x:hidden;
+    padding:24px 18px;
+  }
+  .wrap{max-width:480px; width:100%; text-align:center;}
+  #stage{width:100%; height:260px; display:block; margin:0 auto;}
+  .hint{color:var(--muted); font-size:.85rem; margin-top:6px;}
+  .deep{
+    margin-top:22px; text-align:left; background:#fff; color:#222;
+    border:3px solid #111; border-radius:18px; padding:24px 22px;
+    box-shadow:5px 5px 0 #111; line-height:1.75; font-size:.95rem;
+    opacity:0; transform:translateY(14px); transition:.6s ease;
+  }
+  .deep.show{opacity:1; transform:translateY(0);}
+  .deep .letterTitle{font-family:'Bangers',cursive; font-size:1.3rem; color:#d6336c; display:block; margin-bottom:10px;}
+  a.back{
+    display:inline-block; margin-top:22px; font-family:'Bangers',cursive; letter-spacing:.03em;
+    border:3px solid #111; background:var(--comic); color:#111; padding:10px 22px;
+    border-radius:14px; text-decoration:none; box-shadow:3px 3px 0 #111;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <canvas id="stage"></canvas>
+  <p class="hint" id="hint">Menyalakan keajaiban…</p>
+
+  <div class="deep" id="deepMsg">
+    <span class="letterTitle">Surat Kecil Untuk Aby</span>
+    Kalau boleh jujur, senang banget lihat kamu terus jalan meski capek — bekerja sebagai parfumer, jualan lewat live, semua itu nggak gampang tapi kamu tetap konsisten.<br><br>
+    Semoga umur yang baru ini bawa lebih banyak keberkahan buat kariermu, lebih banyak pelanggan yang loyal, dan lebih banyak hasil dari kerja keras yang selama ini kamu jalani sendiri.<br><br>
+    Sebagai teman terbaikmu, aku cuma mau bilang: semangat terus, Aby. Oh iya, jangan lupa ajakin mabar ML ya, udah kelamaan vakum kita berdua. 😂<br><br>
+    Selamat ulang tahun. 🤍
+  </div>
+
+  <a class="back" href="index.html">← Kembali</a>
+</div>
+
+<script>
+const canvas = document.getElementById('stage');
+const ctx = canvas.getContext('2d');
+function resize(){
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+}
+window.addEventListener('resize', resize);
+canvas.style.width = '100%';
+canvas.style.height = '260px';
+resize();
+
+const lines = ["HAPPY","BIRTHDAY","ABY!"];
+const off = document.createElement('canvas');
+off.width = canvas.width; off.height = canvas.height;
+const octx = off.getContext('2d');
+octx.fillStyle = '#fff';
+octx.textAlign = 'center';
+octx.textBaseline = 'middle';
+const fontSize = Math.min(canvas.width/7, 46);
+octx.font = 'bold ' + fontSize + 'px Bangers, sans-serif';
+const lineHeight = fontSize*1.15;
+const startY = canvas.height/2 - (lines.length-1)*lineHeight/2;
+lines.forEach((line,li)=>{
+  octx.fillText(line, canvas.width/2, startY + li*lineHeight);
+});
+const imgData = octx.getImageData(0,0,off.width,off.height).data;
+const points = [];
+const gap = 4;
+for(let y=0;y<off.height;y+=gap){
+  for(let x=0;x<off.width;x+=gap){
+    const idx = (y*off.width+x)*4+3;
+    if(imgData[idx] > 128) points.push({x,y});
+  }
+}
+points.sort(()=>Math.random()-0.5);
+const targets = points.slice(0, 650);
+
+const particles = targets.map(t=>({
+  x: Math.random()*canvas.width,
+  y: canvas.height + Math.random()*100,
+  tx: t.x, ty: t.y,
+  color: 'hsl(' + Math.floor((t.x/canvas.width)*360) + ',85%,62%)',
+  delay: Math.random()*300,
+  cx: undefined, cy: undefined, alpha: 1
+}));
+
+const gatherDuration = 900, holdDuration = 1000, floatDuration = 1600;
+let startTime = null;
+
+function frame(ts){
+  if(!startTime) startTime = ts;
+  const elapsed = ts - startTime;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  let allDone = true;
+  particles.forEach(p=>{
+    const t = (elapsed - p.delay) / gatherDuration;
+    if(t < 0){
+      allDone = false;
+    } else if(t < 1){
+      allDone = false;
+      const ease = 1-Math.pow(1-t,3);
+      p.cx = p.x + (p.tx-p.x)*ease;
+      p.cy = p.y + (p.ty-p.y)*ease;
+      p.alpha = 1;
+    } else if(elapsed < gatherDuration+holdDuration+p.delay){
+      allDone = false;
+      p.cx = p.tx; p.cy = p.ty; p.alpha = 1;
+    } else {
+      const ft = (elapsed - gatherDuration - holdDuration - p.delay)/floatDuration;
+      if(ft < 1){
+        allDone = false;
+        p.cx = p.tx;
+        p.cy = p.ty - ft*220;
+        p.alpha = 1-ft;
+      } else {
+        p.alpha = 0;
+      }
+    }
+    if(p.cx === undefined) return;
+    ctx.globalAlpha = Math.max(p.alpha,0);
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.cx, p.cy, 2.2, 0, Math.PI*2);
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+  if(!allDone){
+    requestAnimationFrame(frame);
+  } else {
+    document.getElementById('hint').style.display = 'none';
+    const box = document.getElementById('deepMsg');
+    box.classList.add('show');
+  }
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
